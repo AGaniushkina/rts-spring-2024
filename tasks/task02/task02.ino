@@ -2,32 +2,76 @@
 #include <TaskManagerIO.h>
 
 const int pinsCount = 5;
-const int ledPins[pinsCount] = {3, 5, 6, 9, 10};
-const TimePeriod interval[pinsCount] = {repeatMillis(10), repeatMillis(1), repeatMicros(500), repeatMicros(100), repeatMicros(50)};
-
-taskid_t tasks[pinsCount];
-
-class Exec : public Executable {
-private:
-  int _state = LOW;
-
-public:
-  int pin;
-  void exec() override {
-      digitalWrite(pin, _state);
-      _state = (_state == LOW) ? HIGH : LOW;
-  }
-} execs[pinsCount];
+int pins[pinsCount] = {3, 5, 6, 9, 10};
+int* ledStates[] = {LOW, LOW, LOW, LOW, LOW};
+unsigned long previousMillisOrMicros[] = {0, 0, 0, 0, 0};
 
 void setup() {
-  for (int i = 0; i < pinsCount; ++i) {
-    execs[i] = Exec();
-    execs[i].pin = ledPins[i];
-    pinMode(ledPins[i], OUTPUT);
-    tasks[i] = taskManager.schedule(interval[i], &execs[i]);
+   for (int i = 0; i < pinsCount; ++i) {
+    ledStates[i] = LOW;
+    pinMode(pins[i], OUTPUT);
   }
+
+  taskid_t taskId0 = taskManager.scheduleFixedRate(10000, [] {
+    if (ledStates[0] == LOW) {
+      ledStates[0] = HIGH;
+    }
+    else {
+      ledStates[0] = LOW;
+    }
+
+    digitalWrite(pins[0], ledStates[0]);
+  }, TIME_MICROS);
+
+  taskid_t taskId1 = taskManager.scheduleFixedRate(1000, [] {
+    if (ledStates[1] == LOW) {
+      ledStates[1] = HIGH;
+    }
+    else {
+      ledStates[1] = LOW;
+    }
+
+    digitalWrite(pins[1], ledStates[1]);
+  }, TIME_MICROS);
+
+  taskid_t taskId2 = taskManager.scheduleFixedRate(500, [] {
+    if (ledStates[2] == LOW) {
+      ledStates[2] = HIGH;
+    }
+    else {
+      ledStates[2] = LOW;
+    }
+
+    digitalWrite(pins[2], ledStates[2]);
+  }, TIME_MICROS);
+
+  taskid_t taskId3 = taskManager.scheduleFixedRate(100, [] {
+    if (ledStates[3] == LOW) {
+      ledStates[3] = HIGH;
+    }
+    else {
+      ledStates[3] = LOW;
+    }
+
+    digitalWrite(pins[3], ledStates[3]);
+  }, TIME_MICROS);
+
+  taskid_t taskId4 = taskManager.scheduleFixedRate(50, [] {
+    if (ledStates[4] == LOW) {
+      ledStates[4] = HIGH;
+    }
+    else {
+      ledStates[4] = LOW;
+    }
+
+    digitalWrite(pins[4], ledStates[4]);
+  }, TIME_MICROS);
+
+  
+
 }
 
 void loop() {
   taskManager.runLoop();
+
 }
