@@ -4,7 +4,7 @@
 const int pinsCount = 5;
 int pins[pinsCount] = {3, 5, 6, 9, 10};
 int* ledStates[] = {LOW, LOW, LOW, LOW, LOW};
-unsigned long previousMillisOrMicros[] = {0, 0, 0, 0, 0};
+//unsigned long previousMillisOrMicros[] = {0, 0, 0, 0, 0};
 
 void setup() {
    for (int i = 0; i < pinsCount; ++i) {
@@ -20,7 +20,7 @@ void setup() {
       ledStates[0] = LOW;
     }
 
-    digitalWrite(pins[0], ledStates[0]);
+    digitalWrite(3, ledStates[0]);
   }, TIME_MICROS);
 
   taskid_t taskId1 = taskManager.scheduleFixedRate(1000, [] {
@@ -31,7 +31,7 @@ void setup() {
       ledStates[1] = LOW;
     }
 
-    digitalWrite(pins[1], ledStates[1]);
+    digitalWrite(5, ledStates[1]);
   }, TIME_MICROS);
 
   taskid_t taskId2 = taskManager.scheduleFixedRate(500, [] {
@@ -42,7 +42,7 @@ void setup() {
       ledStates[2] = LOW;
     }
 
-    digitalWrite(pins[2], ledStates[2]);
+    digitalWrite(6, ledStates[2]);
   }, TIME_MICROS);
 
   taskid_t taskId3 = taskManager.scheduleFixedRate(100, [] {
@@ -53,7 +53,7 @@ void setup() {
       ledStates[3] = LOW;
     }
 
-    digitalWrite(pins[3], ledStates[3]);
+    digitalWrite(9, ledStates[3]);
   }, TIME_MICROS);
 
   taskid_t taskId4 = taskManager.scheduleFixedRate(50, [] {
@@ -64,14 +64,10 @@ void setup() {
       ledStates[4] = LOW;
     }
 
-    digitalWrite(pins[4], ledStates[4]);
-  }, TIME_MICROS);
-
-  
-
+    digitalWrite(10, ledStates[4]);
+  }, TIME_MICROS); 
 }
 
 void loop() {
   taskManager.runLoop();
-
 }
